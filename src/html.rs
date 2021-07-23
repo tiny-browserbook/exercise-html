@@ -1,32 +1,50 @@
 #[allow(unused_imports)]
 use crate::dom::{AttrMap, Element, Node, Text};
 use combine::error::ParseError;
-use combine::error::StringStreamError;
 use combine::parser::char::char;
 #[allow(unused_imports)]
 use combine::EasyParser;
 use combine::{parser, Parser, Stream};
-use thiserror::Error;
 
-#[derive(Error, Debug, PartialEq)]
-pub enum HTMLParseError {
-    #[error("failed to parse; {0}")]
-    InvalidResourceError(StringStreamError),
+/// `attribute` consumes `name="value"`.
+fn attribute<Input>() -> impl Parser<Input, Output = (String, String)>
+where
+    Input: Stream<Token = char>,
+    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
+{
+    todo!("you need to implement this combinator");
+    (char(' ')).map(|_| ("".to_string(), "".to_string()))
 }
 
-// [NOTE] Specification on HTML parsing: https://html.spec.whatwg.org/multipage/parsing.html#parsing
-//
-// The specification defines parsing algorithm of HTML, which takes input stream as argument and emits DOM.
-// It consists of the following two stages:
-// 1. tokenization stage
-// 2. tree construction stage
-// The first one, tokenization stage, generates tokens from input stream.
-// The latter one, tree construction stage, constructs a DOM while handling scripts inside <script> tags.
-//
-// This implementation omits details of those two stages for simplicity.
-// Please check the following if you'd like to know about the parsing process more deeply:
-// - html5ever crate by Serve project https://github.com/servo/html5ever
-// - HTMLDocumentParser, HTMLTokenizer, HTMLTreeBuilder of Chromium (src/third_party/blink/renderer/core/html/parser/*)
+/// `attributes` consumes `name1="value1" name2="value2" ... name="value"`
+fn attributes<Input>() -> impl Parser<Input, Output = AttrMap>
+where
+    Input: Stream<Token = char>,
+    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
+{
+    todo!("you need to implement this combinator");
+    (char(' ')).map(|_| AttrMap::new())
+}
+
+/// `open_tag` consumes `<tag_name attr_name="attr_value" ...>`.
+fn open_tag<Input>() -> impl Parser<Input, Output = (String, AttrMap)>
+where
+    Input: Stream<Token = char>,
+    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
+{
+    todo!("you need to implement this combinator");
+    (char(' ')).map(|_| ("".to_string(), AttrMap::new()))
+}
+
+/// close_tag consumes `</tag_name>`.
+fn close_tag<Input>() -> impl Parser<Input, Output = String>
+where
+    Input: Stream<Token = char>,
+    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
+{
+    todo!("you need to implement this combinator");
+    (char(' ')).map(|_| ("".to_string()))
+}
 
 // `nodes_` (and `nodes`) tries to parse input as Element or Text.
 fn nodes_<Input>() -> impl Parser<Input, Output = Vec<Box<Node>>>
@@ -56,46 +74,6 @@ where
 {
     todo!("you need to implement this combinator");
     (char(' ')).map(|_| Element::new("".into(), AttrMap::new(), vec![]))
-}
-
-/// `open_tag` consumes `<tag_name attr_name="attr_value" ...>`.
-fn open_tag<Input>() -> impl Parser<Input, Output = (String, AttrMap)>
-where
-    Input: Stream<Token = char>,
-    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
-{
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| ("".to_string(), AttrMap::new()))
-}
-
-/// close_tag consumes `</tag_name>`.
-fn close_tag<Input>() -> impl Parser<Input, Output = String>
-where
-    Input: Stream<Token = char>,
-    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
-{
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| ("".to_string()))
-}
-
-/// `attribute` consumes `name="value"`.
-fn attribute<Input>() -> impl Parser<Input, Output = (String, String)>
-where
-    Input: Stream<Token = char>,
-    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
-{
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| ("".to_string(), "".to_string()))
-}
-
-/// `attributes` consumes `name1="value1" name2="value2" ... name="value"`
-fn attributes<Input>() -> impl Parser<Input, Output = AttrMap>
-where
-    Input: Stream<Token = char>,
-    Input::Error: ParseError<Input::Token, Input::Range, Input::Position>,
-{
-    todo!("you need to implement this combinator");
-    (char(' ')).map(|_| AttrMap::new())
 }
 
 parser! {

@@ -10,5 +10,4 @@ test = false
 bench = false
 
 [dependencies]
-thiserror = "1.0"
 combine = "4.5.2"
