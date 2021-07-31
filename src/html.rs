@@ -124,12 +124,17 @@ parser! {
 }
 
 pub fn parse(raw: &str) -> Box<Node> {
-    let (mut nodes, _) = nodes().parse(raw).unwrap();
+    let mut nodes = parse_raw(raw);
     if nodes.len() == 1 {
         nodes.pop().unwrap()
     } else {
         Element::new("html".to_string(), AttrMap::new(), nodes)
     }
+}
+
+pub fn parse_raw(raw: &str) -> Vec<Box<Node>> {
+    let (nodes, _) = nodes().parse(raw).unwrap();
+    nodes
 }
 
 #[cfg(test)]
