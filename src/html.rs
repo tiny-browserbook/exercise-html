@@ -82,7 +82,7 @@ parser! {
 }
 
 pub fn parse(raw: &str) -> Box<Node> {
-    let (mut nodes, _) = nodes().parse(raw).unwrap();
+    let mut nodes = parse_raw(raw);
     if nodes.len() == 1 {
         nodes.pop().unwrap()
     } else {
@@ -90,6 +90,10 @@ pub fn parse(raw: &str) -> Box<Node> {
     }
 }
 
+pub fn parse_raw(raw: &str) -> Vec<Box<Node>> {
+    let (nodes, _) = nodes().parse(raw).unwrap();
+    nodes
+}
 #[cfg(test)]
 mod tests {
     use crate::dom::Text;
